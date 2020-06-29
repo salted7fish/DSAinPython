@@ -80,23 +80,22 @@ class SingleLinkedList:
             raise IsEmpty("IsEmpty Error: The List is Empty.")
 
         length = self.length()
-        if index < 0 or index > length:
+        if index < 0 or index >= length:
             raise RemoveError("Remove Error: Out of Range.")
 
         if index == 0:
             cur = self.head
             self.head = self.head.next
-            cur.nnext = None
+            cur.next = None
         else:
-            pre = cur = self.head
+            cur = self.head
             count = 0
 
-            while cur.next != None:
+            while count < index - 1:
                 cur = cur.next
                 count += 1
 
-                if count < index:
-                    pre = pre.next
-                else:
-                    pre.next = cur.next
-                    cur.next = None
+            pre = cur
+            cur = cur.next
+            pre.next = cur.next
+            cur.next = None
