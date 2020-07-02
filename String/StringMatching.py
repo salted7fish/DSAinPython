@@ -14,7 +14,7 @@ class StringMatching:
         return True
 
     def char2int(self, c):
-        rt = ord(c) - ord('1') + 1
+        rt = ord(c) - ord('a') + 1
         return rt
 
     def Naive(self):
