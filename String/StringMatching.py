@@ -41,45 +41,88 @@ class StringMatching:
 
         return tf
 
+    def getnextarray(self):
+        m = self.pattLen
+        i, j = 1, 0
+        next = [0] * m
+
+        while i < m:
+            if self.patt[i] == self.patt[j]:
+                next[i] = j + 1
+                i += 1
+                j += 1
+            elif j > 0:
+                j = next[j - 1]
+            else:
+                i += 1
+
+        return next
+
     def Naive(self):
-        for i in range(self.textLen - self.pattLen + 1):
-            if self.match(self.text[i: i + self.pattLen], self.patt[0: self.pattLen]):
+        m = self.pattLen
+        n = self.textLen
+        for i in range(n - m + 1):
+            if self.match(self.text[i: i + m], self.patt[0: m]):
                 print("Pattern occurs with shift " + str(i))
-                return None
+                return i
 
         print("No match")
+        return -1
 
     def RabinKarp(self, q=10007):
+        m = self.pattLen
+        n = self.textLen
         d = 128
-        h = pow(d, self.pattLen - 1, q)
+        h = pow(d, m - 1, q)
         p = t = 0
 
-        for i in range(self.pattLen):
+        for i in range(m):
             p = (d * p + ord(self.patt[i])) % q
             t = (d * t + ord(self.text[i])) % q
 
-        for s in range(self.textLen - self.pattLen + 1):
+        for s in range(n - m + 1):
             if p == t:
-                if self.match(self.text[s: s + self.pattLen], self.patt[0: self.pattLen]):
+                if self.match(self.text[s: s + m], self.patt[0: m]):
                     print("Pattern occurs with shift " + str(s))
-                    return None
-            if s < self.textLen - self.pattLen:
-                t = (d * (t - h * ord(self.text[s])) +
-                     ord(self.text[s + self.pattLen])) % q
+                    return s
+            if s < n - m:
+                t = (d * (t - h * ord(self.text[s])) + ord(self.text[s + m])) % q
 
         print("No match")
+        return -1
 
     def FiniteAutomaton(self):
+        m = self.pattLen
+        n = self.textLen
         q = 0
         tf = self.transfunc()
 
-        for i in range(self.textLen):
+        for i in range(n):
             q = tf[q][ord(self.text[i])]
-            if q == self.pattLen:
-                print("Pattern occurs with shift " + str(i - self.pattLen + 1))
-                return None
+            if q == m:
+                print("Pattern occurs with shift " + str(i - m + 1))
+                return i - m + 1
 
         print('No match.')
+        return -1
 
     def KnuthMorrisPratt(self):
-        pass
+        m = self.pattLen
+        n = self.textLen
+        next = self.getnextarray()
+        i = j = 0
+
+        while i < n:
+            if self.text[i] == self.patt[j]:
+                if j == m - 1:
+                    print("Pattern occurs with shift " + str(i - m + 1))
+                    return i - m + 1
+                i += 1
+                j += 1
+            elif j > 0:
+                j = next[j - 1]
+            else:
+                i += 1
+
+        print('No Match.')
+        return -1
