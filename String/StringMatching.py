@@ -69,10 +69,9 @@ class StringMatching:
         print("No match")
         return -1
 
-    def RabinKarp(self, q=10007):
+    def RabinKarp(self, d=127, q=10007):
         m = self.pattLen
         n = self.textLen
-        d = 128
         h = pow(d, m - 1, q)
         p = t = 0
 
