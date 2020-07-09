@@ -25,8 +25,8 @@ class StringMatching:
 
         return True
 
-    def transfunc(self):
-        sigma = 128
+    def transfunc(self, sigma):
+
 
         tf = [[0 for i in range(sigma)] for j in range(self.pattLen + 1)]
 
@@ -90,11 +90,11 @@ class StringMatching:
         print("No match")
         return -1
 
-    def FiniteAutomaton(self):
+    def FiniteAutomaton(self, sigma=127):
         m = self.pattLen
         n = self.textLen
         q = 0
-        tf = self.transfunc()
+        tf = self.transfunc(sigma)
 
         for i in range(n):
             q = tf[q][ord(self.text[i])]
